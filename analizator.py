@@ -1,3 +1,4 @@
+import wikipedia
 from aiogram.types import Message
 #####################################
 # Исправление Москва и Россия
@@ -37,8 +38,8 @@ def jhn_analizator(tx):
     if lx.find("что")>=0 or lx.find("Cто")>=0 or lx.find("Што")>=0 and lx.find("умеешь")>=0 or lx.find("умееш")>=0:
         r=r+"Я могу общаться с тобой, передразнивать тебя, могу выполнять твои комады"
         etoumno = True
-
-
+    if lx.find("что") >= 0 and lx.find("такое") >= 0:
+        
     if etoumno == False:
         r = jhn_bolsheneznau()
     return r
@@ -60,3 +61,12 @@ def jhn_peredraz(mes: Message):
         elif leter in l:
             var = leter
     text = "Сам, " + new_text.lower() + ", профессор" + var
+def jhn_chto_tak(tx):
+    a = tx.lower()
+    if a.find("что") >= 0 and a.find("такое") >= 0 and len(a) > 10:
+        b = a.replace("что", "")
+        b = a.replace("такое", "")
+        b = a.replace(" ", "")
+        print(a)
+        wikipedia.set_lang("ru")
+        print(wikipedia.summary(a))
