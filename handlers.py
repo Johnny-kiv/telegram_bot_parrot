@@ -5,7 +5,7 @@ from aiogram.types import Message
 from config import admin_id
 
 async def send_to_admin(dp):
-    await Message.reply("Бот запущен")
+    await bot.send_message(chat_id=admin_id, text="Бот запущен")
 
 @dp.message_handler()
 async def echo(message: Message):
