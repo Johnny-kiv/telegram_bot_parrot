@@ -18,6 +18,42 @@ def jhn_ispr(tx):
     return "".join(mas)
 
 #####################################
+# Принимает тек т проверяем максимальное сообщение
+# и при необходимости делит его на массив сообщений
+def jhn_settodim(tx):
+    tx = tx.replace("[", "{")
+    tx = tx.replace("]", "}")
+    rez = []
+    if len(tx) < 4096:
+        rez.append(tx)
+    else:
+        mas = list(tx)
+        ost = tx
+
+        kol = int(len(tx) // 4096) + 2
+
+        for k in range(kol):
+            if len(mas) > 0:
+                pos = ost.rfind(".", 0, 4095)
+                if pos != -1:
+                    ms = mas[0:pos + 1]
+                else:
+                    ms = mas
+
+                rez.append("".join(ms))
+
+                if pos != -1:
+                    for i in range(pos + 1):
+
+                        del mas[0]
+                else:
+                    for i in range(len(mas)):
+                        del mas[0]
+                ost = "".join(mas)
+
+    return rez
+
+#####################################
 # Анализирует и отвечате на Привет и на как дела
 def jhn_analizator(tx):
     lx = tx.lower()
@@ -25,24 +61,27 @@ def jhn_analizator(tx):
     etoumno = False
 
     if lx.find("привет")>=0 or lx.find("салют")>=0 or lx.find("здорово")>=0 or lx.find("здарова")>=0 or lx.find("здарово")>=0 or lx.find("здаров")>=0 or lx.find("здравствуйте")>=0:
-        r="Салют! "
+        r = "Салют! "
         etoumno = True
 
     if lx.find("как дела")>=0 or lx.find("как делы")>=0 or lx.find("как че")>=0:
-        r=r+"У меня все отлично! А как тебя? "
+        r = r + "У меня все отлично! А как тебя? "
         etoumno = True
 
     if lx.find("как")>=0 and (lx.find("зовут")>=0 or lx.find("звать")>=0 or lx.find("имя")>=0):
-        r=r+"Меня зовут Кеша! "
+        r = r +"Меня зовут Кеша! "
         etoumno = True
-    if lx.find("что")>=0 or lx.find("Cто")>=0 or lx.find("Што")>=0 and lx.find("умеешь")>=0 or lx.find("умееш")>=0:
-        r=r+"Я могу общаться с тобой, передразнивать тебя, могу выполнять твои комады"
+    if (lx.find("что")>=0 or lx.find("Cто")>=0 or lx.find("Што")>=0) and (lx.find("умеешь")>=0 or lx.find("умееш")>=0):
+        r = r +"Я могу общаться с тобой, передразнивать тебя, могу выполнять твои комады"
         etoumno = True
-    if lx.find("что") >= 0 and lx.find("такое") >= 0:
+    if lx.find("что") >= 0 and lx.find("такое") >= 0 and len(list(lx))>9:
+        r = r + jhn_chto_tak(lx)
         etoumno = True
     if lx != "/start" and etoumno == False:
-        r = jhn_bolsheneznau()
-    return r
+        r = r + jhn_bolsheneznau()
+
+    mas = jhn_settodim(r)
+    return mas
 
 #####################################
 # Отвечает что больше ничего не знает
@@ -62,11 +101,13 @@ def jhn_peredraz(mes: Message):
             var = leter
     text = "Сам, " + new_text.lower() + ", профессор" + var
 def jhn_chto_tak(tx):
-    a = tx.lower()
-    if a.find("что") >= 0 and a.find("такое") >= 0 and len(a) > 10:
-        b = a.replace("что", "")
-        b = a.replace("такое", "")
-        b = a.replace(" ", "")
-        print(a)
+    rez=""
+    if tx.find("что") >= 0 and tx.find("такое") >= 0 and len(list(tx))>9:
+        tx = tx.replace("что", "")
+        tx = tx.replace("такое", "")
+        tx = tx.replace(" ", "")
+        tx = tx.replace("   ","")
         wikipedia.set_lang("ru")
-        print(wikipedia.summary(a))
+        rez = wikipedia.page(tx)
+
+    return rez
