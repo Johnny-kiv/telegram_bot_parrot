@@ -108,6 +108,6 @@ def jhn_chto_tak(tx):
         tx = tx.replace(" ", "")
         tx = tx.replace("   ","")
         wikipedia.set_lang("ru")
-        rez = wikipedia.page(tx)
+        rez = wikipedia.summary(tx)
 
     return rez
