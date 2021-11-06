@@ -86,7 +86,7 @@ def jhn_analizator(tx):
 #####################################
 # Отвечает что больше ничего не знает
 def jhn_bolsheneznau():
-    return "Я не поняла"
+    return "Я не понял"
 def jhn_peredraz(mes: Message):
     print(mes)
     new_text = ""
