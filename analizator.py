@@ -39,16 +39,15 @@ def jhn_analizator(tx):
         r=r+"Я могу общаться с тобой, передразнивать тебя, могу выполнять твои комады"
         etoumno = True
     if lx.find("что") >= 0 and lx.find("такое") >= 0:
-        r=
         etoumno = True
-    if etoumno == False:
+    if lx != "/start" and etoumno == False:
         r = jhn_bolsheneznau()
     return r
 
 #####################################
 # Отвечает что больше ничего не знает
 def jhn_bolsheneznau():
-    return "Я не поняла?"
+    return "Я не поняла"
 def jhn_peredraz(mes: Message):
     print(mes)
     new_text = ""
