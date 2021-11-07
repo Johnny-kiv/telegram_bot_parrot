@@ -71,10 +71,16 @@ def jhn_analizator(tx):
     if lx.find("как")>=0 and (lx.find("зовут")>=0 or lx.find("звать")>=0 or lx.find("имя")>=0):
         r = r +"Меня зовут Кеша! "
         etoumno = True
-    if (lx.find("что")>=0 or lx.find("Cто")>=0 or lx.find("Што")>=0) and (lx.find("умеешь")>=0 or lx.find("умееш")>=0):
-        r = r +"Я могу общаться с тобой и могу ещё говорить что такое что-то"
+    if ((lx.find("что")>=0 or lx.find("Cто")>=0 or lx.find("Што")>=0) and (lx.find("умеешь")>=0 or lx.find("умееш")>=0)) or (lx.find("что")>=0 and lx.find("можешь")>=0):
+        r = r +"Я могу общаться с тобой и могу, приветствовать и  ещё отвечать на вопросы. Для этого напиши 'Что такое ...'  или 'Кто такой...'  или 'Кто такая...' и дальше пиши, что тебя интересует.  Например 'Что такое вода' или 'Кто такой Петр I'. И я тебе пришлю ответ"
         etoumno = True
     if lx.find("что") >= 0 and lx.find("такое") >= 0 and len(list(lx))>9:
+        r = r + jhn_chto_tak(lx)
+        etoumno = True
+    if lx.find("кто") >= 0 and lx.find("такой") >= 0 and len(list(lx))>9:
+        r = r + jhn_chto_tak(lx)
+        etoumno = True
+    if lx.find("кто") >= 0 and lx.find("такая") >= 0 and len(list(lx))>9:
         r = r + jhn_chto_tak(lx)
         etoumno = True
     if lx != "/start" and etoumno == False:
@@ -102,14 +108,19 @@ def jhn_peredraz(mes: Message):
     text = "Сам, " + new_text.lower() + ", профессор" + var
 def jhn_chto_tak(tx):
     rez=""
-    if tx.find("что") >= 0 and tx.find("такое") >= 0 and len(list(tx))>9:
-        tx = tx.replace("что", "")
-        tx = tx.replace("такое", "")
-        tx = tx.replace(" ", "")
-        tx = tx.replace("   ","")
-        wikipedia.set_lang("ru")
-        try:
-            rez = wikipedia.summary(tx)
-        except wikipedia.exceptions.PageError:
-            rez = "Я не понял"
+    tx = tx.replace("что", "")
+    tx = tx.replace("такое", "")
+    tx = tx.replace("кто", "")
+    tx = tx.replace("такой", "")
+    tx = tx.replace("кто", "")
+    tx = tx.replace("такая", "")
+    tx = tx.replace(" ", "")
+    tx = tx.replace("   ","")
+    wikipedia.set_lang("ru")
+    try:
+        rez = wikipedia.summary(tx)
+    except wikipedia.exceptions.PageError:
+        rez = "Я не понял"
+    except wikipedia.exceptions.DisambiguationError:
+        rez = "Я не понял"
     return rez
