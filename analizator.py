@@ -72,7 +72,7 @@ def jhn_analizator(tx):
         r = r +"Меня зовут Кеша! "
         etoumno = True
     if (lx.find("что")>=0 or lx.find("Cто")>=0 or lx.find("Што")>=0) and (lx.find("умеешь")>=0 or lx.find("умееш")>=0):
-        r = r +"Я могу общаться с тобой, передразнивать тебя, могу выполнять твои комады"
+        r = r +"Я могу общаться с тобой и могу ещё говорить что такое что-то"
         etoumno = True
     if lx.find("что") >= 0 and lx.find("такое") >= 0 and len(list(lx))>9:
         r = r + jhn_chto_tak(lx)
